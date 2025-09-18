@@ -1,12 +1,18 @@
 // src/app/layout.tsx
 import "./globals.css";
 import { AuthProvider } from "../context/AuthContext";
-export const metadata = {
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
   title: "Mi App",
-  description: "Demo de login/register/logout (frontend)"
+  description: "Demo de login/register/logout (frontend)",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="es">
       <body>

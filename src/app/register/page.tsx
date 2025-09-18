@@ -19,10 +19,9 @@ export default function RegisterPage() {
     const handleRegister = (e: React.FormEvent) => {
         e.preventDefault();
 
-        // ⚡ Aquí deberías guardar el usuario en tu API o DB
         if (form.name && form.email && form.age && form.password) {
             localStorage.setItem("user", JSON.stringify(form));
-            router.push("/dashboard"); // 👈 o redirige al login si prefieres
+            router.push("/dashboard");
         } else {
             alert("Por favor, completa todos los campos");
         }
