@@ -1,30 +1,26 @@
-"use client"
-import { useAuthContext } from "@/context/AuthContext";
 import Link from "next/link";
 
-export default function Navbar (){
-    const {user,logout} = useAuthContext();
-
-    return (
-       <nav className="flex justify-between items-center p-4 bg-cyan-700 text-white">
-      <h1 className="text-xl font-bold">Consejo Financiero</h1>
-      <div className="flex gap-4">
-        <Link href="/">Inicio</Link>
-        {user ? (
-          <>
-            <Link href="/dashboard">Dashboard</Link>
-            <button onClick={logout} className="bg-red-500 px-3 py-1 rounded-md">
-              Cerrar sesión
-            </button>
-          </>
-        ) : (
-          <>
-            <Link href="/login">Login</Link>
-            <Link href="/register">Registro</Link>
-          </>
-        )}
-      </div>
+export default function Navbar() {
+  return (
+    <nav className="bg-indigo-600 text-white p-4 shadow-md flex justify-between items-center">
+      <h1 className="text-xl font-semibold">Money Manager</h1>
+      <ul className="flex gap-6">
+        <li>
+          <Link href="/dashboard" className="hover:text-gray-200 transition">
+            Dashboard
+          </Link>
+        </li>
+        <li>
+          <Link href="/dashboard/categories" className="hover:text-gray-200 transition">
+            Categorías
+          </Link>
+        </li>
+        <li>
+          <Link href="/dashboard/expense" className="hover:text-gray-200 transition">
+            Gastos
+          </Link>
+        </li>
+      </ul>
     </nav>
-    );
-
+  );
 }
