@@ -66,10 +66,7 @@ export default function LoginPage() {
                             className="w-full rounded-xl border border-gray-400/50 bg-white/15 text-white placeholder-gray-300 p-4 focus:border-cyan-400 focus:ring-2 focus:ring-cyan-300 focus:outline-none backdrop-blur-sm"
                         />
                     </div>
-
-                    {/* Botón mejorado */}
-                    
-
+    
                     <button
                     type="submit"
                     disabled={loading}
