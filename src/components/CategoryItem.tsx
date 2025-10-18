@@ -15,7 +15,7 @@ export default function CategoryItem({
   return (
     <li className="flex justify-between items-center py-2">
       <span>
-        <strong className="text-gray-800">{cat.name}</strong> -{" "}
+        <strong className="text-gray-800">{cat.nombreCategoria }</strong> -{" "}
         <span className="text-gray-600">{cat.description}</span>
       </span>
       <div className="space-x-2">
@@ -26,8 +26,8 @@ export default function CategoryItem({
           Editar
         </button>
         <button
-          onClick={() => deleteCategory(cat.id)}
-          className="bg-red-500 hover:bg-red-800 text-white px-3 py-1 rounded-lg transition delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110  m-auto"
+          onClick={() => deleteCategory(cat.id ?? cat.categoria_id)}
+          className="bg-red-500 hover:bg-red-800 text-white px-3 py-1 rounded-lg transition delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110  m-2"
         >
           Eliminar
         </button>

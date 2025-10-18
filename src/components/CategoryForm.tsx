@@ -1,65 +1,58 @@
 import React from "react";
 import { Category } from "./CategoryList";
 
-interface Props {
+interface CategoryFormProps {
   newCategory: Category;
   setNewCategory: React.Dispatch<React.SetStateAction<Category>>;
   createCategory: (e: React.FormEvent) => void;
 }
 
-export default function CategoryForm({
+const CategoryForm: React.FC<CategoryFormProps> = ({
   newCategory,
   setNewCategory,
   createCategory,
-}: Props) {
+}) => {
   return (
-    <div className="w-full max-w-lg bg-white rounded-2xl shadow-lg p-8">
-      <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">
-        Crear una nueva Categoria
-      </h2>
+    <form onSubmit={createCategory} className="mb-6 w-full max-w-md">
+      <div className="mb-4">
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          Nombre de la categoría *
+        </label>
+        <input
+          type="text"
+          value={newCategory.nombreCategoria} // Cambiado aquí
+          onChange={(e) =>
+            setNewCategory({ ...newCategory, nombreCategoria: e.target.value }) // Cambiado aquí
+          }
+          placeholder="Ej: Alimentación, Transporte, etc."
+          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          required
+        />
+      </div>
 
-      <form onSubmit={createCategory} className="space-y-4">
-        {/* Campo Nombre */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Nombre
-          </label>
-          <input
-            type="text"
-            placeholder="Nombre de la categoria"
-            value={newCategory.name}
-            onChange={(e) =>
-              setNewCategory({ ...newCategory, name: e.target.value })
-            }
-            required
-            className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
+      <div className="mb-4">
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          Descripción
+        </label>
+        <input
+          type="text"
+          value={newCategory.description}
+          onChange={(e) =>
+            setNewCategory({ ...newCategory, description: e.target.value })
+          }
+          placeholder="Descripción de la categoría"
+          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+      </div>
 
-        {/* Campo Descripción */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Descripción
-          </label>
-          <input
-            type="text"
-            placeholder="Descripción"
-            value={newCategory.description}
-            onChange={(e) =>
-              setNewCategory({ ...newCategory, description: e.target.value })
-            }
-            required
-            className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
-
-        <button
-          type="submit"
-          className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition"
-        >
-          Crear
-        </button>
-      </form>
-    </div>
+      <button
+        type="submit"
+        className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md transition duration-200 w-full"
+      >
+        Crear Categoría
+      </button>
+    </form>
   );
-}
+};
+
+export default CategoryForm;

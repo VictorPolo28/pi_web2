@@ -3,49 +3,78 @@
 import React, { useEffect, useState } from "react";
 import CategoryList from "@/components/CategoryList";
 import { useAuthContext } from "@/context/AuthContext";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 export default function DashboardPage() {
   const { user } = useAuthContext();
   const [categorias, setCategorias] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
-  // Cast the imported component to a loose React component type so we can pass props without TS errors
   const CategoryListAny = CategoryList as React.ComponentType<any>;
 
   useEffect(() => {
-    if (!user) {
-      router.push("/login");
-    }
-  }, [user, router]);
-
-  useEffect(() => {
     const fetchCategorias = async () => {
-      if (!user) return;
+      if (!user?.usuario_id) {
+        console.error("❌No hay usuario autenticado o el ID es inválido:", user);
+        return;
+      }
+
+      setLoading(true);
+      setError(null);
 
       try {
-        const res = await fetch(`http://localhost:8080/api/users/${user.id}/categories`);
-        if (!res.ok) throw new Error("Error al obtener categorías");
+        const userId = user.usuario_id;
+        console.log(" Usuario actual:", user);
+        console.log(" Consultando categorías para ID:", userId);
+
+        const res = await fetch(`http://localhost:8080/api/categorias/usuario/${userId}`);
+        
+        console.log("Estado de respuesta:", res.status);
+        console.log("URL llamada:", `http://localhost:8080/api/categorias/usuario/${userId}`);
+
+        if (!res.ok) {
+          const errorText = await res.text();
+          console.error(" Error response:", errorText);
+          throw new Error(`Error ${res.status}: ${errorText || 'Error al obtener categorías'}`);
+        }
+
         const data = await res.json();
+        console.log(" Categorías recibidas:", data);
         setCategorias(data);
       } catch (error) {
-        console.error(error);
+        console.error("Error al obtener categorías:", error);
+        setError(error instanceof Error ? error.message : "Error desconocido");
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchCategorias();
   }, [user]);
 
-  if (!user) return null;
+  if (!user) {
+    return (
+      <div className="max-w-3xl mx-auto mt-10 bg-white p-6 rounded-lg shadow">
+        <p>Cargando usuario...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-3xl mx-auto mt-10 bg-white p-6 rounded-lg shadow">
       <h1 className="text-3xl font-bold mb-4">Panel Financiero</h1>
-      <p>Bienvenido, <strong>{user.name}</strong></p>
+      <p>Bienvenido, <strong>{user.nombre}</strong></p>
+      <p>ID del usuario: <strong>{user.usuario_id}</strong></p>
+
+      {loading && <p className="text-blue-500">Cargando categorías...</p>}
+      {error && <p className="text-red-500">Error: {error}</p>}
 
       <div className="mt-10">
-        {/* Aquí pasas las categorías ya cargadas */}
-        <CategoryListAny category={categorias} setCategory={setCategorias} />
+        {!loading && !error && (
+          <CategoryListAny category={categorias} setCategory={setCategorias} />
+        )}
       </div>
     </div>
   );
