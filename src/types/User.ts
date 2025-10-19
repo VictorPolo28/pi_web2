@@ -4,4 +4,5 @@ export interface User {
   nombre: string;
   correo: string;
   userId?: number; // Opcional para compatibilidad
+  balanceMinimoAlerta?: number; 
 }
