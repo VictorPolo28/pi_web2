@@ -27,11 +27,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const data = await res.json();
       console.log("Datos del backend:", data);
 
-      
+
       const normalizedUser: User = {
-        usuario_id: data.userId || data.usuario_id || data.id, // Múltiples opciones
-        nombre: data.name || data.nombre,
-        correo: data.email || data.correo,
+        usuario_id: data.userId,
+        nombre: data.name,
+        correo: data.email,
+        balanceMinimoAlerta: data.balanceMinimoAlerta, // Agregar esto
       };
 
       console.log(" Usuario normalizado:", normalizedUser);
