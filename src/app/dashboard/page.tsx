@@ -125,7 +125,7 @@ export default function DashboardPage() {
       <div className="max-w-6xl mx-auto mt-10 p-6">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto"></div>
-          <p className="text-gray-600 mt-4">Cargando información del usuario...</p>
+          <p className="text-amber-50  mt-4">Cargando información del usuario...</p>
         </div>
       </div>
     );

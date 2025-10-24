@@ -26,9 +26,9 @@ export default function LoginPage() {
     };
 
     return (
-        <div className="flex items-center justify-center-safe min-h-screen bg-[url('https://plus.unsplash.com/premium_photo-1681487769650-a0c3fbaed85a?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8ZmluYW56YXN8ZW58MHx8MHx8fDA%3D')] bg-cover bg-center">
+        <div className="flex items-center justify-center-safe min-h-screen ">
 
-            <div className="w-full max-w-lg sm:max-w-xl lg:max-w-3xl min-h-[500px] bg-white/10 backdrop-blur-lg shadow-2xl rounded-2xl p-10 border border-white/20 flex flex-col">
+            <div className="w-full max-w-lg sm:max-w-xl lg:max-w-3xl min-h-[500px] bg-black/40 backdrop-blur-lg shadow-2xl rounded-2xl p-10 border border-white/20 flex flex-col">
 
                 <h1 className="text-3xl font-semibold text-center mb-6 text-white drop-shadow-md">
                     Login
@@ -70,7 +70,7 @@ export default function LoginPage() {
                     <button
                     type="submit"
                     disabled={loading}
-                    className="w-full bg-blue-500 text-white p-3 rounded-lg hover:bg-blue-600 disabled:bg-gray-400"
+                    className="w-full text-white p-3 rounded-lg bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-500 hover:to-emerald-600 "
                 >
                     {loading ? "Iniciando sesión..." : "Iniciar Sesión"}
                 </button>
