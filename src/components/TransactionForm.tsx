@@ -59,13 +59,13 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
   };
 
   return (
-    <form onSubmit={handleSubmit} className="bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-200 rounded-2xl p-6  shadow-md mb-6">
+    <form onSubmit={handleSubmit} className="bg-gradient-to-br from-blue-200 to-indigo-80 border border-blue-200 rounded-lg p-8 text-center   shadow-md mb-6">
       <h3 className="text-lg font-semibold mb-4">Nueva Transacción</h3>
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            Descripción *
+            Descripción 
           </label>
           <input
             type="text"
@@ -78,7 +78,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            Monto *
+            Monto 
           </label>
           <input
             type="number"

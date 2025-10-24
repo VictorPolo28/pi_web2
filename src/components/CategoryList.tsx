@@ -134,7 +134,7 @@ export default function CategoryList() {
 
       setNotification({
         type: "success",
-        message: "Categoría creada correctamente ✅",
+        message: "Categoría creada correctamente ",
       });
       setTimeout(() => setNotification(null), 3000);
     } catch (e) {
@@ -176,7 +176,7 @@ export default function CategoryList() {
       
       setNotification({
         type: "success",
-        message: "Categoría actualizada correctamente ✅",
+        message: "Categoría actualizada correctamente ",
       });
       setTimeout(() => setNotification(null), 3000);
     } catch (e) {
@@ -197,7 +197,7 @@ export default function CategoryList() {
       setCategories(prev => prev.filter(cat => cat.id !== id));
       setNotification({
         type: "success",
-        message: "Categoría eliminada correctamente ✅",
+        message: "Categoría eliminada correctamente ",
       });
       setTimeout(() => setNotification(null), 3000);
     } catch (e) {
@@ -223,7 +223,7 @@ export default function CategoryList() {
   }
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+    <div className="bg-gradient-to-r from-black/60 to-cyan-600/30 rounded-2xl shadow-md border border-gray-100 p-6 ">
       {/* Notificación global */}
       {notification && (
         <div
@@ -248,7 +248,7 @@ export default function CategoryList() {
         <div className="flex items-center space-x-3">
           <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg flex items-center justify-center">
             <Image
-              src="/iconos/categories.png"
+              src="/iconos/categoria.png"
               alt="Categorías"
               width={24}
               height={24}
@@ -256,23 +256,24 @@ export default function CategoryList() {
             />
           </div>
           <div>
-            <h2 className="text-2xl font-bold text-gray-800">Categorías</h2>
-            <p className="text-gray-600 mt-1">
+            <h2 className="text-2xl font-bold text-cyan-100">Categorías</h2>
+            <p className="text-cyan-200 mt-1">
               Gestiona tus categorías de gastos e ingresos
             </p>
           </div>
         </div>
         <div className="text-right">
-          <div className="text-3xl font-bold text-blue-600 flex items-center justify-end space-x-2">
+          <div className="text-3xl font-bold text-green-700 text-shadow-black flex items-center justify-end space-x-2">
             <Image
-              src="/iconos/total.png"
+              src="/iconos/categoria.png"
               alt="Total"
-              width={24}
+              width={40}
               height={24}
+              className="invert"
             />
-            <span>{categories.length}</span>
+            <span className="text-shadow-2xs">{categories.length}</span>
           </div>
-          <div className="text-sm text-gray-500">Total categorías</div>
+          <div className="text-sm text-amber-50 text-shadow-black">Total categorías</div>
         </div>
       </div>
 
@@ -325,18 +326,18 @@ export default function CategoryList() {
           </button>
         </div>
       ) : categories.length === 0 ? (
-        <div className="bg-gray-50 border border-gray-200 rounded-xl p-8 text-center">
+        <div className="bg-gradient-to-br from-blue-200 to-indigo-80 border border-blue-200 rounded-lg p-8 text-center">
           <Image
             src="/iconos/folder-error.png"
             alt="Sin categorías"
             width={60}
             height={60}
-            className="mx-auto mb-3 opacity-60"
+            className="mx-auto mb-3 opacity-90"
           />
-          <h3 className="text-gray-700 font-semibold text-lg">
+          <h3 className="text-black-200 font-semibold text-lg ">
             No hay categorías
           </h3>
-          <p className="text-gray-500 mt-1">
+          <p className="text-amber-50 mt-1">
             Crea tu primera categoría para comenzar
           </p>
         </div>

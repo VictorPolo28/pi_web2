@@ -7,7 +7,7 @@ import { Category } from "./CategoryList";
 interface CategoryCardProps {
   category: Category;
   onEdit: (category: Category) => void;
-  onDelete: (id: number) => void; // ✅ Cambiado a number obligatorio
+  onDelete: (id: number) => void; 
 }
 
 const CategoryCard: React.FC<CategoryCardProps> = ({
@@ -79,7 +79,7 @@ const CategoryCard: React.FC<CategoryCardProps> = ({
         </button>
 
         <button
-          onClick={() => onDelete(category.id)} // ✅ category.id es number
+          onClick={() => onDelete(category.id)} // 
           className="flex-1 flex items-center justify-center gap-2 bg-white bg-opacity-50 hover:bg-opacity-100 text-red-600 px-2 py-2 rounded-lg text-sm font-medium transition-all duration-200 border border-opacity-20 hover:border-opacity-40"
         >
           <Image

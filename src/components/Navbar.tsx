@@ -6,21 +6,21 @@ export default function Navbar (){
     const {user,logout} = useAuthContext();
 
     return (
-       <nav className="flex justify-between items-center p-4 bg-linear-to-r/srgb from-indigo-500 to-teal-400  text-black">
+       <nav className="flex justify-between items-center p-4 bg-gradient-to-r from-white/60 to-cyan-500/30 text-cyan-50 rounded-xl backdrop-blur-md shadow-md">
       <h1 className="text-xl font-bold">Consejo Financiero</h1>
       <div className="flex gap-4">
-        <Link href="/">Inicio</Link>
+        <Link href="/" className=" bg-gradient-to-r hover:from-red -500 hover:to-red-600 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg  bg-clip-tex px-3 py-1">Inicio</Link>
         {user ? (
           <>
-            <Link href="/dashboard">Mis Finanzas</Link>
-            <button onClick={logout} className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 px-3 py-1 rounded-md">
+            <Link href="/dashboard" className="bg-gradient-to-r hover:from-red-500 hover:to-green-600 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg  bg-clip-tex px-3 py-1">Mis Finanzas</Link>
+            <button onClick={logout} className="bg-gradient-to-r  from-blue-500 to-purple-500 hover:from-red -500 hover:to-red-600 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg  bg-clip-tex px-3 py-1 ">
               Cerrar sesión
             </button>
           </>
         ) : (
           <>
-            <Link href="/login">Login</Link>
-            <Link href="/register">Registro</Link>
+            <Link href="/login" className="bg-gradient-to-r">Login</Link>
+            <Link href="/register" className="bg-gradient-to-r">Registro</Link>
           </>
         )}
       </div>

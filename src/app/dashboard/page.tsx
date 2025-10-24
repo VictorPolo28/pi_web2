@@ -145,18 +145,15 @@ export default function DashboardPage() {
   return (
     <div className="max-w-7xl mx-auto mt-6 p-4 space-y-8">
       {/* Header del Dashboard */}
-      <div className="text-center">
-        <h1 className="text-4xl font-bold text-gray-800 mb-2">Panel Financiero</h1>
-        <p className="text-xl text-gray-600">
+      <div className="text-center  from-white/60 to-cyan-500/30 ">
+        <h1 className="text-4xl font-bold text-blue-300 mb-2">Panel Financiero</h1>
+        <p className="text-xl text-gray-300">
           Bienvenido, <strong className="text-blue-600">{user.nombre}</strong>
         </p>
-        <p className="text-gray-500 mt-1">Gestiona tus finanzas de manera eficiente</p>
+        <p className="text-gray-300 mt-1">Gestiona tus finanzas de manera eficiente</p>
       </div>
 
-      {/* Alerta de Balance */}
-      {financialSummary && (
-        <BalanceAlert currentBalance={financialSummary.balance} />
-      )}
+      
        {/* Consejo Financiero */}
           <div className="bg-gradient-to-br from-green-500 to-teal-600 rounded-2xl p-6 text-white">
             <h3 className="text-xl font-bold mb-3"> Consejo del Día</h3>
@@ -203,19 +200,31 @@ export default function DashboardPage() {
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
        
         {/* Columna Izquierda - Formularios */}
-        <div className="xl:col-span-1 space-y-8">
+        <div className="xl:col-span-1 space-y-8 ">
           {/* Formulario de Transacción */}
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-            <h2 className="text-2xl font-bold text-gray-800 mb-6">Nueva Transacción</h2>
+          <div className="bg-gradient-to-r from-black/60 to-cyan-600/30 rounded-2xl shadow-md border border-gray-300 p-6 t">
+            <h2 className="text-2xl font-bold text-cyan-200 mb-6">Registra tus Transacciónes</h2>
             <TransactionForm 
               categories={categories}
               onTransactionCreated={handleTransactionCreated}
               userId={user.usuario_id}
             />
           </div>
+          {/* Alerta de Balance */}
+      {financialSummary && (
+        <BalanceAlert currentBalance={financialSummary.balance} />
+      )}
 
-          {/* Lista de Transacciones */}
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100">
+         
+        </div>
+
+        {/* Columna Derecha - Categorías */}
+        <div className="space-y-8 xl:col-span-2">
+          <div className=" rounded-2xl shadow-sm border border-gray-100">
+            <CategoryList />
+          </div>
+                 {/* Lista de Transacciones */}
+          <div className="bg-gradient-to-r from-black/60 to-cyan-600/30 rounded-2xl shadow-md border border-gray-300 p-6 ">
             <TransactionList 
               transactions={transactions}
               categories={categories}
@@ -223,14 +232,6 @@ export default function DashboardPage() {
               onTransactionUpdated={handleTransactionUpdated}
             />
           </div>
-        </div>
-
-        {/* Columna Derecha - Categorías */}
-        <div className="space-y-8 xl:col-span-2">
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100">
-            <CategoryList />
-          </div>
-
          
         </div>
       </div>

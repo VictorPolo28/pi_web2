@@ -17,15 +17,15 @@ const CategoryEditForm: React.FC<CategoryEditFormProps> = ({
 }) => {
   return (
     <div className="fixed inset-0 backdrop-blur-sm bg-black/30 flex items-center justify-center p-4 z-50">
-      <div className="bg-white p-6 rounded-lg w-full max-w-md">
+      <div className="bg-gradient-to-br from-blue-200 to-indigo-90 border border-blue-200 p-6 rounded-lg w-full max-w-md">
         <div className="flex items-center mb-4">
-          <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg flex items-center justify-center mr-3">
+          <div className="w-10 h-10 bg-gradient-to-r from-amber-50 to-blue-500 rounded-lg flex items-center justify-center mr-3">
             <Image
               src="/iconos/edit.png"
               alt="Editar"
               width={20}
               height={20}
-              className="invert"
+              className=""
             />
           </div>
           <div>
@@ -37,8 +37,8 @@ const CategoryEditForm: React.FC<CategoryEditFormProps> = ({
         <form onSubmit={updateCategory}>
           {/* Campos del formulario (igual que antes) */}
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Nombre de la categoría *
+            <label className="block text-sm font-medium text-gray mb-1">
+              Nombre de la categoría 
             </label>
             <input
               type="text"
@@ -55,8 +55,8 @@ const CategoryEditForm: React.FC<CategoryEditFormProps> = ({
           </div>
 
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Tipo *
+            <label className="block text-sm font-medium text-gray mb-1">
+              Tipo 
             </label>
             <select
               value={editingCategory.tipo}
@@ -75,7 +75,7 @@ const CategoryEditForm: React.FC<CategoryEditFormProps> = ({
           </div>
 
           <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-gray mb-1">
               Descripción
             </label>
             <textarea
@@ -103,7 +103,7 @@ const CategoryEditForm: React.FC<CategoryEditFormProps> = ({
                 alt="Guardar"
                 width={20}
                 height={20}
-                className="invert"
+                className=""
               />
               <span>Guardar</span>
             </button>
@@ -118,7 +118,7 @@ const CategoryEditForm: React.FC<CategoryEditFormProps> = ({
                 alt="Cancelar"
                 width={20}
                 height={20}
-                className="invert"
+                className=""
               />
               <span>Cancelar</span>
             </button>

@@ -76,7 +76,7 @@ const BalanceAlert: React.FC<BalanceAlertProps> = ({ currentBalance }) => {
   return (
     <>
       {/* Alerta Principal */}
-      <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+      <div className="bg-red-200 border border-red-200 rounded-lg p-4 mb-6">
         <div className="flex justify-between items-start">
           <div className="flex items-center">
             <div className="flex-shrink-0">
@@ -109,8 +109,8 @@ const BalanceAlert: React.FC<BalanceAlertProps> = ({ currentBalance }) => {
 
       {/* Modal de Configuración */}
       {showSettings && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-lg p-6 w-full max-w-md">
+        <div className="fixed inset-0 backdrop-blur-sm bg-black/30 flex items-center justify-center p-4 z-50">
+          <div className="bg-gradient-to-br from-blue-200 to-indigo-90 border border-blue-200 rounded-lg p-8 text-center w-full max-w-md ">
             <h3 className="text-lg font-semibold mb-4">Configurar Alerta de Balance</h3>
             
             <form onSubmit={actualizarBalanceMinimo}>
@@ -128,26 +128,26 @@ const BalanceAlert: React.FC<BalanceAlertProps> = ({ currentBalance }) => {
                     value={nuevoBalanceMinimo}
                     onChange={(e) => setNuevoBalanceMinimo(e.target.value)}
                     placeholder={balanceMinimo.toString()}
-                    className="pl-7 w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="pl-7 w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 "
                     required
                   />
                 </div>
-                <p className="text-xs text-gray-500 mt-1">
+                <p className="text-xs text-amber-50 mt-1">
                   Recibirás una alerta cuando tu balance sea menor a este valor.
                 </p>
               </div>
 
-              <div className="flex space-x-3">
+              <div className="flex space-x-6">
                 <button
                   type="submit"
-                  className="flex-1 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md"
+                  className="flex-1 bg-gradient-to-r  from-blue-500 to-purple-500 hover:from-red -500 hover:to-green-600 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg  bg-clip-tex px-3 py-1 "
                 >
                   Guardar
                 </button>
                 <button
                   type="button"
                   onClick={() => setShowSettings(false)}
-                  className="flex-1 bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-md"
+                  className="flex-1 bg-gradient-to-r  from-blue-500 to-purple-500 hover:from-red -500 hover:to-red-600 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg  bg-clip-tex text-white px-4 py-2 "
                 >
                   Cancelar
                 </button>

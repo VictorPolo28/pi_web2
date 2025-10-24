@@ -78,29 +78,29 @@ const TransactionList: React.FC<TransactionListProps> = ({
 
   return (
     <>
-      <div className="p-6">
+      <div className="p-6 ">
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h3 className="text-xl font-bold text-gray-800">Historial de Transacciones</h3>
-            <p className="text-gray-600 mt-1">Tus movimientos recientes</p>
+            <h3 className="text-xl font-bold  text-cyan-200">Historial de Transacciones</h3>
+            <p className=" text-cyan-50 mt-1">Tus movimientos recientes</p>
           </div>
           <div className="text-right">
             <div className="text-2xl font-bold text-purple-600">{transactions.length}</div>
-            <div className="text-sm text-gray-500">Total transacciones</div>
+            <div className="text-sm text-cyan-50 ">Total transacciones</div>
           </div>
         </div>
 
         {transactions.length === 0 ? (
-          <div className="bg-gray-50 border border-gray-200 rounded-xl p-8 text-center">
+          <div className="bg-gradient-to-br from-blue-200 to-indigo-80 border border-blue-200 rounded-lg p-8 text-center">
             <Image
               src="/iconos/dollarMoneda.png"
               alt="Sin transacciones"
               width={64}
               height={64}
-              className="mx-auto mb-3 opacity-60"
+              className="mx-auto mb-3 opacity-80"
             />
-            <h3 className="text-gray-700 font-semibold text-lg">No hay transacciones</h3>
-            <p className="text-gray-500 mt-1">Registra tu primera transacción</p>
+            <h3 className="text-gray-800 font-semibold text-lg">No hay transacciones</h3>
+            <p className="text-amber-50 mt-1">Registra tu primera transacción</p>
           </div>
         ) : (
           <div className="space-y-3">

@@ -63,28 +63,28 @@ const TransactionEditForm: React.FC<TransactionEditFormProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 backdrop-blur-sm bg-black/30 bg-opacity-70 flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-2xl p-6 w-full max-w-md max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 backdrop-blur-sm bg-black/30 flex items-center justify-center p-4 z-50">
+      <div className="bg-gradient-to-br from-blue-300 to-indigo-90 border border-blue-200 text-center w-full max-w-md  rounded-2xl p-6 max-h-[90vh] overflow-y-auto">
         <div className="flex items-center mb-4">
-          <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg flex items-center justify-center mr-3">
+          <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-amber-50 rounded-lg flex items-center justify-center mr-3">
             <img
               src="/iconos/edit.png"
               alt="Editar"
               width={20}
               height={20}
-              className="invert"
+              className=""
             />
           </div>
           <div>
             <h3 className="text-lg font-semibold text-gray-800">Editar Transacción</h3>
-            <p className="text-sm text-gray-600">Modifica los datos de tu transacción</p>
+            <p className="text-sm text-amber-50">Modifica los datos de tu transacción</p>
           </div>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Descripción */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray mb-2">
               Descripción *
             </label>
             <input
@@ -98,7 +98,7 @@ const TransactionEditForm: React.FC<TransactionEditFormProps> = ({
 
           {/* Monto */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray mb-2">
               Monto *
             </label>
             <input
@@ -113,7 +113,7 @@ const TransactionEditForm: React.FC<TransactionEditFormProps> = ({
 
           {/* Fecha */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray mb-2">
               Fecha *
             </label>
             <input
@@ -127,8 +127,8 @@ const TransactionEditForm: React.FC<TransactionEditFormProps> = ({
 
           {/* Tipo */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Tipo *
+            <label className="block text-sm font-medium text-gray mb-2">
+              Tipo 
             </label>
             <select
               value={formData.tipo}
@@ -143,8 +143,8 @@ const TransactionEditForm: React.FC<TransactionEditFormProps> = ({
 
           {/* Categoría */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Categoría *
+            <label className="block text-sm font-medium text-gray mb-2">
+              Categoría 
             </label>
             <select
               value={formData.categoriaId}

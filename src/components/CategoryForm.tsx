@@ -46,7 +46,7 @@ const CategoryForm: React.FC<CategoryFormProps> = ({
    return (
     <form
       onSubmit={createCategory}
-      className="bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-200 rounded-2xl p-6 mb-6 w-full max-w-lg mx-auto"
+      className="bg-gradient-to-br from-blue-200 to-indigo-80 border border-blue-200 rounded-2xl p-6 mb-6 w-full max-w-lg mx-auto"
     >
       {/* Encabezado */}
       <div className="flex items-center mb-4">
@@ -56,7 +56,7 @@ const CategoryForm: React.FC<CategoryFormProps> = ({
             alt="Nuevo"
             width={20}
             height={20}
-            className="invert"
+            className=""
           />
         </div>
         <div>
@@ -90,7 +90,7 @@ const CategoryForm: React.FC<CategoryFormProps> = ({
 
         {/* Select personalizado */}
         <div className="relative" ref={selectRef}>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-gray mb-2">
             Tipo
           </label>
           <div
@@ -164,7 +164,7 @@ const CategoryForm: React.FC<CategoryFormProps> = ({
           alt="Crear"
           width={20}
           height={20}
-          className="invert"
+          className=""
         />
         <span>Crear Categoría</span>
       </button>

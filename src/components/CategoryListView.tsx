@@ -62,7 +62,7 @@ const CategoryListView: React.FC<CategoryListViewProps> = ({
   }
 
   return (
-    <div className="w-full max-w-3xl mx-auto">
+    <div className="w-full max-w-3xl mx-auto ">
       <h3 className="text-xl font-semibold mb-4 text-gray-800">
         Tus Categorías
       </h3>
