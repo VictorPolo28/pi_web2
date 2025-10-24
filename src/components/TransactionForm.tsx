@@ -59,7 +59,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
   };
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow-md mb-6">
+    <form onSubmit={handleSubmit} className="bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-200 rounded-2xl p-6  shadow-md mb-6">
       <h3 className="text-lg font-semibold mb-4">Nueva Transacción</h3>
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
@@ -138,7 +138,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
 
       <button
         type="submit"
-        className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md w-full"
+        className="bg-linear-to-r/srgb from-indigo-500 to-teal-400 p-6 hover:bg-blue-600 font-semibold  transition-all duration-200 transform hover:scale-[1.02] shadow-sm hover:shadow-md flex items-center justify-center space-x-2 text-white px-4 py-2 rounded-md w-full"
       >
         Agregar Transacción
       </button>

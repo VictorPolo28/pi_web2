@@ -1,18 +1,18 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
+import Image from "next/image";
 import CategoryForm from "./CategoryForm";
 import CategoryEditForm from "./CategoryEditForm";
-import CategoryListView from "./CategoryListView";
+import CategoryCard from "./CategoryCard";
 import { useAuthContext } from "@/context/AuthContext";
 
-
 export interface Category {
-  id?: number;
-  categoria_id?: number;
-  nombreCategoria: string; 
+  id: number;
+  nombreCategoria: string;
   description: string;
-  usuarioId?: number;
+  usuarioId: number;
+  tipo: "GASTO" | "INGRESO";
 }
 
 export type LoadingStatus = {
@@ -21,97 +21,101 @@ export type LoadingStatus = {
   completado: boolean;
 };
 
+const API_BASE_URL = "http://localhost:8080/api";
+
 export default function CategoryList() {
   const { user } = useAuthContext();
   const [categories, setCategories] = useState<Category[]>([]);
   const [editingCategory, setEditingCategory] = useState<Category | null>(null);
+  const [notification, setNotification] = useState<{
+    type: "success" | "error";
+    message: string;
+  } | null>(null);
   const [status, setStatus] = useState<LoadingStatus>({
     cargando: false,
     error: null,
     completado: false,
   });
 
-  
   const [newCategory, setNewCategory] = useState<Category>({
-    nombreCategoria: "", 
+    id: 0,
+    nombreCategoria: "",
     description: "",
     usuarioId: 0,
+    tipo: "GASTO",
   });
 
-  // incroniza el usuarioId cuando el usuario esté disponible
+  // Manejador de errores
+  const handleError = useCallback((error: unknown, mensaje: string) => {
+    const mensajeError = error instanceof Error ? error.message : "Error desconocido";
+    console.error(`${mensaje}:`, mensajeError);
+    setNotification({ type: "error", message: `${mensaje}: ${mensajeError}` });
+    setStatus(prev => ({ ...prev, cargando: false, error: mensajeError }));
+    setTimeout(() => setNotification(null), 5000);
+  }, []);
+
+  // Cargar categorías
+  const fetchCategories = useCallback(async () => {
+    if (!user?.usuario_id) return;
+
+    setStatus({ cargando: true, error: null, completado: false });
+    try {
+      const res = await fetch(`${API_BASE_URL}/categorias/usuario/${user.usuario_id}`);
+      if (!res.ok) throw new Error("Error al cargar las categorías");
+
+      const datos = await res.json();
+      
+      console.log("Datos recibidos del backend:", datos);
+      
+      const categoriasNormalizadas = Array.isArray(datos)
+        ? datos.map((cat: any) => ({
+            id: cat.id,
+            nombreCategoria: cat.nombreCategoria || cat.nombre_categoria || "",
+            description: cat.description || "",
+            usuarioId: cat.usuarioId || user.usuario_id,
+            tipo: cat.tipo || "GASTO",
+          }))
+        : [];
+
+      console.log("Categorías normalizadas:", categoriasNormalizadas);
+      
+      setCategories(categoriasNormalizadas);
+      setStatus({ cargando: false, error: null, completado: true });
+    } catch (e) {
+      handleError(e, "Error al obtener las categorías");
+    }
+  }, [user, handleError]);
+
+  // Sincroniza usuarioId
   useEffect(() => {
     if (user?.usuario_id) {
-      setNewCategory((prev) => ({
+      setNewCategory(prev => ({
         ...prev,
         usuarioId: user.usuario_id,
       }));
     }
   }, [user]);
 
-  // Cargar categorías del usuario autenticado
+  // Cargar categorías al montar
   useEffect(() => {
-    if (!user?.usuario_id) return;
+    fetchCategories();
+  }, [fetchCategories]);
 
-    const getCategories = async () => {
-      setStatus({ cargando: true, error: null, completado: false });
-
-      try {
-        const res = await fetch(
-          `http://localhost:8080/api/categorias/usuario/${user.usuario_id}`
-        );
-        if (!res.ok) throw new Error("Error al cargar las categorías");
-
-        const datos = await res.json();
-        console.log("Categorías recibidas del backend:", datos);
-        
-        // Normaliza los datos por si acaso
-        const categoriasNormalizadas = Array.isArray(datos) 
-          ? datos.map((cat: any) => ({
-              id: cat.id,
-              nombreCategoria: cat.nombreCategoria || cat.nombre_categoria || "",
-              description: cat.description || "",
-              usuarioId: cat.usuarioId || user.usuario_id
-            }))
-          : [];
-          
-        setCategories(categoriasNormalizadas);
-        setStatus({ cargando: false, error: null, completado: true });
-      } catch (e) {
-        setStatus({
-          cargando: false,
-          error: e instanceof Error ? e.message : "Error desconocido",
-          completado: false,
-        });
-      }
-    };
-
-    getCategories();
-  }, [user]);
-
-  // Crear una nueva categoría 
-  const createCategory = async (e: React.FormEvent) => {
+  // Crear categoría
+  const createCategory = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
     if (!user?.usuario_id) return;
 
     try {
-      console.log("Enviando categoría:", {
-        nombreCategoria: newCategory.nombreCategoria,
-        description: newCategory.description,
-       
+      const res = await fetch(`${API_BASE_URL}/categorias/usuario/${user.usuario_id}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          nombreCategoria: newCategory.nombreCategoria,
+          description: newCategory.description,
+          tipo: newCategory.tipo,
+        }),
       });
-
-      const res = await fetch(
-        `http://localhost:8080/api/categorias/usuario/${user.usuario_id}`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            nombreCategoria: newCategory.nombreCategoria, 
-            description: newCategory.description,
-            // ELIMINA usuarioId del body - el backend ya lo tiene del path
-          }),
-        }
-      );
 
       if (!res.ok) {
         const errorText = await res.text();
@@ -119,40 +123,43 @@ export default function CategoryList() {
       }
 
       const createdCategory = await res.json();
-      console.log(" Categoría creada:", createdCategory);
-
-      setCategories([...categories, createdCategory]);
-      //Reset con nombreCategoria
+      setCategories(prev => [...prev, createdCategory]);
       setNewCategory({
-        nombreCategoria: "", 
+        id: 0,
+        nombreCategoria: "",
         description: "",
         usuarioId: user.usuario_id,
+        tipo: "GASTO",
       });
-    } catch (e) {
-      console.error("Error al crear la categoría:", e);
-      alert("Error al crear la categoría: " + (e instanceof Error ? e.message : "Error desconocido"));
-    }
-  };
 
-  // Actualizar categoría 
-  const updateCategory = async (e: React.FormEvent) => {
+      setNotification({
+        type: "success",
+        message: "Categoría creada correctamente ✅",
+      });
+      setTimeout(() => setNotification(null), 3000);
+    } catch (e) {
+      handleError(e, "Error al crear la categoría");
+    }
+  }, [user, newCategory, handleError]);
+
+  // Actualizar categoría
+  const updateCategory = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
     if (!editingCategory?.id) return;
 
     try {
-      console.log("Actualizando categoría:", editingCategory);
-
-      const res = await fetch(
-        `http://localhost:8080/api/categorias/${editingCategory.id}`,
-        {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            nombreCategoria: editingCategory.nombreCategoria, // Cambiado aquí
-            description: editingCategory.description,
-          }),
-        }
-      );
+      console.log("Enviando datos de actualización:", editingCategory);
+      
+      const res = await fetch(`${API_BASE_URL}/categorias/${editingCategory.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          nombreCategoria: editingCategory.nombreCategoria,
+          description: editingCategory.description,
+          tipo: editingCategory.tipo,
+          usuarioId: editingCategory.usuarioId,
+        }),
+      });
 
       if (!res.ok) {
         const errorText = await res.text();
@@ -161,63 +168,192 @@ export default function CategoryList() {
 
       const updatedCategory = await res.json();
       console.log("Categoría actualizada:", updatedCategory);
-
-      setCategories(
-        categories.map((cat) =>
-          cat.id === updatedCategory.id ? updatedCategory : cat
-        )
+      
+      setCategories(prev =>
+        prev.map(cat => (cat.id === updatedCategory.id ? updatedCategory : cat))
       );
       setEditingCategory(null);
+      
+      setNotification({
+        type: "success",
+        message: "Categoría actualizada correctamente ✅",
+      });
+      setTimeout(() => setNotification(null), 3000);
     } catch (e) {
-      console.error(" Error al actualizar la categoría:", e);
-      alert("Error al actualizar la categoría: " + (e instanceof Error ? e.message : "Error desconocido"));
+      handleError(e, "Error al actualizar la categoría");
     }
-  };
+  }, [editingCategory, handleError]);
 
-  // Eliminar categoría 
-  const deleteCategory = async (id?: number) => {
-    if (!id) return;
+  // Eliminar categoría
+  const deleteCategory = useCallback(async (id: number) => {
+    if (!id || !confirm('¿Estás seguro de eliminar esta categoría?')) return;
 
     try {
-      const res = await fetch(
-        `http://localhost:8080/api/categorias/${id}`,
-        { method: "DELETE" }
-      );
+      const res = await fetch(`${API_BASE_URL}/categorias/${id}`, { 
+        method: "DELETE" 
+      });
       if (!res.ok) throw new Error("Error al eliminar la categoría");
 
-      setCategories(categories.filter((cat) => cat.id !== id));
+      setCategories(prev => prev.filter(cat => cat.id !== id));
+      setNotification({
+        type: "success",
+        message: "Categoría eliminada correctamente ✅",
+      });
+      setTimeout(() => setNotification(null), 3000);
     } catch (e) {
-      console.error("Error al eliminar la categoría:", e);
+      handleError(e, "Error al eliminar la categoría");
     }
-  };
+  }, [handleError]);
 
-  // Mostrar pantalla de carga mientras se obtiene el usuario
   if (!user) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gray-100">
-        <p className="text-gray-600 text-lg">Cargando usuario...</p>
+        <div className="text-center">
+          <Image
+            src="/iconos/loading.png"
+            alt="Cargando"
+            width={50}
+            height={50}
+            className="mx-auto mb-3 animate-spin"
+          />
+          <p className="text-gray-600 text-lg">Cargando usuario...</p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-6">
-      {/* Formulario de creación */}
-      <CategoryForm
-        newCategory={newCategory}
-        setNewCategory={setNewCategory}
-        createCategory={createCategory}
-      />
+    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+      {/* Notificación global */}
+      {notification && (
+        <div
+          className={`mb-4 p-3 rounded-xl text-center flex items-center justify-center space-x-2 ${
+            notification.type === "success"
+              ? "bg-green-50 text-green-700 border border-green-200"
+              : "bg-red-50 text-red-700 border border-red-200"
+          }`}
+        >
+          <Image
+            src={notification.type === "success" ? "/iconos/success.png" : "/iconos/error.png"}
+            alt={notification.type === "success" ? "Éxito" : "Error"}
+            width={20}
+            height={20}
+          />
+          <span>{notification.message}</span>
+        </div>
+      )}
 
-      {/* Lista de categorías */}
-      <CategoryListView
-        status={status}
-        category={categories}
-        setEditingCategory={setEditingCategory}
-        deleteCategory={deleteCategory}
-      />
+      {/* Header */}
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center space-x-3">
+          <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg flex items-center justify-center">
+            <Image
+              src="/iconos/categories.png"
+              alt="Categorías"
+              width={24}
+              height={24}
+              className="invert"
+            />
+          </div>
+          <div>
+            <h2 className="text-2xl font-bold text-gray-800">Categorías</h2>
+            <p className="text-gray-600 mt-1">
+              Gestiona tus categorías de gastos e ingresos
+            </p>
+          </div>
+        </div>
+        <div className="text-right">
+          <div className="text-3xl font-bold text-blue-600 flex items-center justify-end space-x-2">
+            <Image
+              src="/iconos/total.png"
+              alt="Total"
+              width={24}
+              height={24}
+            />
+            <span>{categories.length}</span>
+          </div>
+          <div className="text-sm text-gray-500">Total categorías</div>
+        </div>
+      </div>
 
-      {/* Formulario de edición */}
+      {/* Formulario */}
+      <div className="mb-8">
+        <CategoryForm
+          newCategory={newCategory}
+          setNewCategory={setNewCategory}
+          createCategory={createCategory}
+        />
+      </div>
+
+      {/* Estado de carga, error o lista */}
+      {status.cargando ? (
+        <div className="text-center py-8">
+          <Image
+            src="/iconos/loading.png"
+            alt="Cargando"
+            width={40}
+            height={40}
+            className="mx-auto mb-3 animate-spin"
+          />
+          <p className="text-gray-500">Cargando categorías...</p>
+        </div>
+      ) : status.error ? (
+        <div className="bg-red-50 border border-red-200 rounded-xl p-6 text-center">
+          <Image
+            src="/iconos/error.png"
+            alt="Error"
+            width={40}
+            height={40}
+            className="mx-auto mb-3"
+          />
+          <h3 className="text-red-800 font-semibold text-lg mb-2">
+            Error al cargar categorías
+          </h3>
+          <p className="text-red-600 mb-4">{status.error}</p>
+          <button 
+            onClick={fetchCategories}
+            className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 mx-auto"
+          >
+            <Image
+              src="/iconos/error.webp"
+              alt="Reintentar"
+              width={16}
+              height={16}
+              className="invert"
+            />
+            <span>Reintentar</span>
+          </button>
+        </div>
+      ) : categories.length === 0 ? (
+        <div className="bg-gray-50 border border-gray-200 rounded-xl p-8 text-center">
+          <Image
+            src="/iconos/folder-error.png"
+            alt="Sin categorías"
+            width={60}
+            height={60}
+            className="mx-auto mb-3 opacity-60"
+          />
+          <h3 className="text-gray-700 font-semibold text-lg">
+            No hay categorías
+          </h3>
+          <p className="text-gray-500 mt-1">
+            Crea tu primera categoría para comenzar
+          </p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {categories.map((cat) => (
+            <CategoryCard
+              key={cat.id}
+              category={cat}
+              onEdit={setEditingCategory}
+              onDelete={deleteCategory}
+            />
+          ))}
+        </div>
+      )}
+
+      {/* Modal edición */}
       {editingCategory && (
         <CategoryEditForm
           editingCategory={editingCategory}
